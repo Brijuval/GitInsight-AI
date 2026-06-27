@@ -1,17 +1,26 @@
 # GitInsight: Autonomous Engineering Agent
 
-<p align="center">
-  <img src="screenshot_main.png" width="48%" alt="Main Dashboard Ingested" />
-  <img src="screenshot_graph.png" width="48%" alt="Interactive Dependency Graph" />
-</p>
-<p align="center">
-  <img src="screenshot_chat.png" width="48%" alt="Multi-Agent Chat Playground" />
-  <img src="screenshot_pr.png" width="48%" alt="PR Code Review Agent" />
-</p>
-<p align="center">
+<div align="center">
+  <img src="screenshot_main.png" alt="Main Dashboard Ingested" width="80%" />
+</div>
+
+<div align="center">
+  <img src="screenshot_graph.png" alt="Interactive Dependency Graph" width="80%" />
+</div>
+
+<div align="center">
+  <img src="screenshot_chat.png" alt="Multi-Agent Chat Playground" width="80%" />
+</div>
+
+<div align="center">
+  <img src="screenshot_pr.png" alt="PR Code Review Agent" width="80%" />
+</div>
+
+<div align="center">
   <sub><i>Offline setup warning state:</i></sub><br/>
-  <img src="screenshot_offline.png" width="45%" alt="Set API Key Warning State" />
-</p>
+  <img src="screenshot_offline.png" alt="Set API Key Warning State" width="80%" />
+</div>
+
 
 
 **GitInsight** is an AI-powered Codebase Intelligence Platform and Autonomous Engineering Agent that acts as an AI Staff Engineer for your repositories. Going far beyond standard RAG systems, GitInsight maps repo structures and AST dependency graphs, predicts change impacts, generates dev onboarding tours, designs implementation steps for features, reviews code diffs, and coordinates tasks using a multi-agent orchestration pattern.
