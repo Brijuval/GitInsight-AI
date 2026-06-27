@@ -1,0 +1,21 @@
+diff --git a/database.py b/database.py
+new file mode 100644
+index 0000000..71427b3
+--- /dev/null
++++ b/database.py
+@@ -0,0 +1,15 @@
++import sqlite3
++
++def get_user_data(username):
++    # CRITICAL SECURITY BUG: SQL Injection vulnerability (no parameterization)
++    # API Key exposure mock (Secret exposure)
++    API_KEY = "AIzaSyFakeKey1234567890"
++    
++    conn = sqlite3.connect('users.db')
++    cursor = conn.cursor()
++    
++    # VULNERABLE: Direct string interpolation into sql query
++    query = f"SELECT * FROM users WHERE username = '{username}'"
++    cursor.execute(query)
++    
++    return cursor.fetchall()

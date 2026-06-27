@@ -1,0 +1,30 @@
+# Environment variables (Sensitive secrets)
+.env
+.env.local
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache & build files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# GitInsight Local Cache & Cloned Workspace Directories
+.gitinsight/
+cloned_repos/
+
+# Editor / System configurations
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

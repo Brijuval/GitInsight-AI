@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitInsight: Autonomous Engineering Agent</title>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Prism Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <!-- Vis Network Graph Styling -->
+    <link rel="stylesheet" href="https://unpkg.com/vis-network/standalone/umd/vis-network.min.css">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo-icon"></div>
+                <div class="logo-text">
+                    <h1>GitInsight</h1>
+                    <span>Autonomous Staff Agent</span>
+                </div>
+            </div>
+
+            <!-- Repository Configuration -->
+            <div class="sidebar-section">
+                <h3>Repository Setup</h3>
+                <div class="input-group">
+                    <input type="text" id="repo-path-input" placeholder="e.g. . or d:/projects/auth" value=".">
+                    <button id="scan-btn" class="glow-btn">
+                        <i data-lucide="scan"></i> Scan Repo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cost & Token Metrics -->
+            <div class="sidebar-section stats-card">
+                <h3>System Usage Meter</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Files Found</span>
+                        <span class="stat-value" id="stat-files-found">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Indexed / Cache</span>
+                        <span class="stat-value" id="stat-files-indexed">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Tokens Used</span>
+                        <span class="stat-value" id="stat-tokens-used">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Est. Cost</span>
+                        <span class="stat-value highlight-cyan" id="stat-cost">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Directory Explorer -->
+            <div class="sidebar-section explorer">
+                <h3>Directory Explorer</h3>
+                <div id="file-tree" class="tree-container">
+                    <div class="loading-text">No repository scanned yet.</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="workspace">
+            <header class="workspace-header">
+                <div class="repo-details">
+                    <i data-lucide="folder-git2" class="icon-cyan"></i>
+                    <div>
+                        <h2 id="active-repo-name">No active repository</h2>
+                        <span id="active-repo-path">Click Scan Repo to analyze codebases</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="settings-btn" class="icon-btn-text api-key-btn-warning" title="API Configuration">
+                        <i data-lucide="key"></i> <span id="api-btn-text">Set API Key</span>
+                    </button>
+
+                    <div class="status-badge online" id="status-badge">
+                        <span class="pulse-dot"></span>
+                        <span class="status-text">Standby</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Navigation Tabs -->
+            <nav class="tabs-nav">
+                <button class="tab-btn active" data-tab="agent-chat">
+                    <i data-lucide="bot"></i> AI Agent Playground
+                </button>
+                <button class="tab-btn" data-tab="dependency-graph">
+                    <i data-lucide="network"></i> Dependency Graph
+                </button>
+                <button class="tab-btn" id="onboarding-tab-btn" data-tab="onboarding-tour">
+                    <i data-lucide="compass"></i> Onboarding Tour
+                </button>
+            </nav>
+
+            <!-- Tab Contents -->
+            <div class="tab-content active" id="tab-agent-chat">
+                <!-- Preset Action Chips -->
+                <div class="presets-container">
+                    <button class="preset-chip" id="preset-change-impact">
+                        <i data-lucide="git-fork"></i> Change Impact
+                    </button>
+                    <button class="preset-chip" id="preset-feature-planner">
+                        <i data-lucide="file-plus"></i> Feature Planner
+                    </button>
+                    <button class="preset-chip" id="preset-architecture">
+                        <i data-lucide="git-branch"></i> Architecture Evolution
+                    </button>
+                    <button class="preset-chip" id="preset-pr-review">
+                        <i data-lucide="file-check-2"></i> PR Code Review
+                    </button>
+                </div>
+
+                <!-- Chat History Interface -->
+                <div class="chat-wrapper">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message system-message">
+                            <div class="avatar"><i data-lucide="bot"></i></div>
+                            <div class="message-content">
+                                <h3>Welcome to GitInsight AI Staff Engineer!</h3>
+                                <p>I am your autonomous engineering agent. Once your repository is scanned, I can analyze code risk, review diffs, plan features, or explore files. Ask me anything or select one of the action presets above.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <div class="chat-input-container">
+                            <textarea id="chat-input" placeholder="Ask a question about the repository or paste instructions..." rows="1"></textarea>
+                            <button id="send-btn" class="send-btn">
+                                <i data-lucide="send"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Graph -->
+            <div class="tab-content" id="tab-dependency-graph">
+                <div class="graph-toolbar">
+                    <span>Double-click a file node to inspect its contents and AI purpose.</span>
+                    <button id="refresh-graph-btn" class="icon-btn-text">
+                        <i data-lucide="refresh-cw"></i> Reload Graph
+                    </button>
+                </div>
+                <div id="graph-container" class="graph-viewer">
+                    <div class="loading-text">Scan a repository to visualize import paths.</div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Onboarding Tour -->
+            <div class="tab-content" id="tab-onboarding-tour">
+                <div class="onboarding-toolbar">
+                    <button id="generate-onboarding-btn" class="glow-btn">
+                        <i data-lucide="sparkles"></i> Generate Fresh Roadmap
+                    </button>
+                </div>
+                <div id="onboarding-content" class="markdown-body">
+                    <div class="loading-text">Click generate to compile a personalized developer onboarding tour.</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT INSPECTION DRAWER -->
+        <section class="inspector">
+            <div class="inspector-header">
+                <i data-lucide="file-text" class="icon-cyan"></i>
+                <h3 id="inspected-filename">File Inspector</h3>
+            </div>
+            
+            <!-- File AI Metadata Card -->
+            <div class="inspector-card" id="file-meta-card">
+                <div class="no-file-selected">Select a file from the explorer or graph to inspect metadata.</div>
+                <div class="meta-content hidden">
+                    <div class="meta-section">
+                        <h4>AI Summary</h4>
+                        <p id="meta-purpose">-</p>
+                    </div>
+                    <div class="meta-row">
+                        <div class="meta-section">
+                            <h4>Exports</h4>
+                            <div class="tag-container" id="meta-exports"></div>
+                        </div>
+                        <div class="meta-section">
+                            <h4>Imports</h4>
+                            <div class="tag-container" id="meta-imports"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Viewer -->
+            <div class="code-viewer-container">
+                <div class="code-header">
+                    <span>Source Code</span>
+                    <span class="file-lang" id="inspected-lang">-</span>
+                </div>
+                <pre class="line-numbers"><code id="code-display" class="language-none">Select a file to inspect source code.</code></pre>
+            </div>
+        </section>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal-overlay hidden" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Settings & API Configuration</h3>
+                <button class="close-btn" id="close-settings-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="api-key-input">Gemini API Key</label>
+                    <input type="password" id="api-key-input" placeholder="AIzaSy...">
+                    <p class="help-text">Your API Key is kept in memory only and never logged. To avoid entering this repeatedly, set the `GEMINI_API_KEY` environmental variable in a local `.env` file.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-settings-btn" class="glow-btn">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Presets Modals (Dynamic triggers) -->
+    <div class="modal-overlay hidden" id="action-modal">
+        <div class="modal lg">
+            <div class="modal-header">
+                <h3 id="action-modal-title">Action Title</h3>
+                <button class="close-btn" id="close-action-btn">&times;</button>
+            </div>
+            <div class="modal-body" id="action-modal-body">
+                <!-- Dynamic contents injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CDN Libraries -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <!-- Custom Application Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
