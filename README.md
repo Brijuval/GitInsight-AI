@@ -97,19 +97,35 @@ flowchart TD
     classDef tool fill:#1e293b,stroke:#334155,stroke-width:1px,color:#fff;
     classDef user fill:#0b0f19,stroke:#00f2fe,stroke-width:2px,color:#fff;
 
-    User(["👤 Developer Query"]) :::user -->|Ask Question| Planner["📋 Step 1: Planner Agent<br/>(Deconstructs query into tasks)"]:::planner
-    Planner -->|Generates Search Strategy| Investigator["🔍 Step 2: Investigator Agent<br/>(Executes tools & scans files)"]:::investigator
+    User(["👤 Developer Query"])
+    Planner["📋 Step 1: Planner Agent<br/>(Deconstructs query into tasks)"]
+    Investigator["🔍 Step 2: Investigator Agent<br/>(Executes tools & scans files)"]
+    Answerer["🧠 Step 3: Answer Agent<br/>(Synthesizes markdown report)"]
+    
+    class User user;
+    class Planner planner;
+    class Investigator investigator;
+    class Answerer answerer;
+
+    User -->|Ask Question| Planner
+    Planner -->|Generates Search Strategy| Investigator
     
     subgraph Local Repository Tools
-        Investigator <-->|Scan Folders| Tool1["📁 list_dir()"]:::tool
-        Investigator <-->|Read Code| Tool2["📄 view_file()"]:::tool
-        Investigator <-->|Query Text| Tool3["🔎 search_code()"]:::tool
-        Investigator <-->|Map Imports| Tool4["🕸️ get_dependency_graph()"]:::tool
+        Tool1["📁 list_dir()"]:::tool
+        Tool2["📄 view_file()"]:::tool
+        Tool3["🔎 search_code()"]:::tool
+        Tool4["🕸️ get_dependency_graph()"]:::tool
     end
     
-    Investigator -->|Sends raw code context| Answerer["🧠 Step 3: Answer Agent<br/>(Synthesizes markdown report)"]:::answerer
-    Answerer -->|Return final response| User :::user
+    Investigator <--> Tool1
+    Investigator <--> Tool2
+    Investigator <--> Tool3
+    Investigator <--> Tool4
+    
+    Investigator -->|Sends raw code context| Answerer
+    Answerer -->|Return final response| User
 ```
+
 
 *   **Planner Agent**: Generates a JSON step-by-step investigation strategy (e.g. searching terms, reading files).
 *   **Investigation Agent**: Interacts with the local repository using specialized tools (`list_dir`, `view_file`, `search_code`, `get_dependency_graph`) to extract files and mappings.
