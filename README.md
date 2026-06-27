@@ -1,24 +1,7 @@
 # GitInsight: Autonomous Engineering Agent
 
 <div align="center">
-  <img src="screenshot_main.png" alt="Main Dashboard Ingested" width="80%" />
-</div>
-
-<div align="center">
-  <img src="screenshot_graph.png" alt="Interactive Dependency Graph" width="80%" />
-</div>
-
-<div align="center">
-  <img src="screenshot_chat.png" alt="Multi-Agent Chat Playground" width="80%" />
-</div>
-
-<div align="center">
-  <img src="screenshot_pr.png" alt="PR Code Review Agent" width="80%" />
-</div>
-
-<div align="center">
-  <sub><i>Offline setup warning state:</i></sub><br/>
-  <img src="screenshot_offline.png" alt="Set API Key Warning State" width="80%" />
+  <img src="screenshot_main1.jpg" alt="Main Dashboard Ingested" width="80%" />
 </div>
 
 
@@ -177,3 +160,26 @@ To ensure the application can be deployed to public cloud endpoints (like Render
 
 ### 5. Cost & Token Metering
 To show business readiness, the platform has a built-in real-time token monitor that reads `usage_metadata` from Gemini API calls. It estimates prompt and response costs in real time (e.g. $0.075/1M input tokens). Combined with local MD5 content hashing, GitInsight caches file summaries in `cache.json`, preventing redundant API calls and lowering operational costs to $0.00 on rescans.
+
+
+# OUTPUT: 
+<div align="center">
+  <img src="screenshot_main.png" alt="Main Dashboard Ingested" width="80%" />
+</div>
+
+<div align="center">
+  <img src="screenshot_graph.png" alt="Interactive Dependency Graph" width="80%" />
+</div>
+
+<div align="center">
+  <img src="screenshot_chat.png" alt="Multi-Agent Chat Playground" width="80%" />
+</div>
+
+<div align="center">
+  <img src="screenshot_pr.png" alt="PR Code Review Agent" width="80%" />
+</div>
+
+<div align="center">
+  <sub><i>Offline setup warning state:</i></sub><br/>
+  <img src="screenshot_offline.png" alt="Set API Key Warning State" width="80%" />
+</div>
